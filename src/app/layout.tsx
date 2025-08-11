@@ -33,6 +33,12 @@ export const metadata: Metadata = {
     template: `%s | Resistor App`,
   },
   description: pageDescription,
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: pageTitle,
+  },
   openGraph: {
     title: pageTitle,
     description: pageDescription,
@@ -49,6 +55,10 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
 };
 

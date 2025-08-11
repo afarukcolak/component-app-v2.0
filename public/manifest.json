@@ -1,0 +1,22 @@
+{
+  "name": "Resistor & Capacitor Code Calculator",
+  "short_name": "Resistor App",
+  "description": "Easily calculate resistor color codes and capacitor 3-digit codes with our intuitive component workbench. A perfect tool for electronics hobbyists and engineers.",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
+}
