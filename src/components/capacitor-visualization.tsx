@@ -3,6 +3,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { getCapacitorCode } from '@/lib/component-utils';
+import { Heart } from 'lucide-react';
 
 interface CapacitorVisualizationProps {
   value: string;
@@ -11,6 +12,15 @@ interface CapacitorVisualizationProps {
 }
 
 export function CapacitorVisualization({ value, className, isTaken }: CapacitorVisualizationProps) {
+  if (value === '<3') {
+    return (
+      <div className={cn("relative flex items-center justify-center w-32 h-10 text-primary", className, isTaken && "opacity-50")}>
+        <Heart className="w-8 h-8 fill-current" />
+        <span className="absolute text-xs font-bold text-primary-foreground select-none">FI</span>
+      </div>
+    );
+  }
+
   const code = getCapacitorCode(value);
 
   return (

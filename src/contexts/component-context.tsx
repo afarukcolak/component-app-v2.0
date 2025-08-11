@@ -48,19 +48,27 @@ export const ComponentProvider = ({ children }: { children: ReactNode }) => {
         });
         return;
     }
-    const parsed = parseComponentValue(data.value);
-    if (!parsed) {
-        toast({
-            variant: 'destructive',
-            title: 'Invalid Value',
-            description: `Could not parse the component value "${data.value}".`,
-        });
-        return;
+    
+    let formattedValue: string;
+    if (data.value === '<3') {
+        formattedValue = '<3';
+    } else {
+        const parsed = parseComponentValue(data.value);
+        if (!parsed) {
+            toast({
+                variant: 'destructive',
+                title: 'Invalid Value',
+                description: `Could not parse the component value "${data.value}".`,
+            });
+            return;
+        }
+        formattedValue = parsed.formattedValue;
     }
+
 
     const newComponent: Component = {
       ...data,
-      value: parsed.formattedValue,
+      value: formattedValue,
       uid: crypto.randomUUID(),
       type,
       taken: false,
@@ -85,6 +93,9 @@ export const ComponentProvider = ({ children }: { children: ReactNode }) => {
     
     let processedData = { ...data };
     if (data.value) {
+      if (data.value === '<3') {
+        processedData.value = '<3';
+      } else {
         const parsed = parseComponentValue(data.value);
         if (!parsed) {
             toast({
@@ -95,6 +106,7 @@ export const ComponentProvider = ({ children }: { children: ReactNode }) => {
             return;
         }
         processedData.value = parsed.formattedValue;
+      }
     }
 
 
