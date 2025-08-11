@@ -18,6 +18,7 @@ interface ComponentContextType {
   addComponent: (type: ComponentType, data: { id: string; value: string }) => void;
   updateComponent: (uid: string, data: Partial<Omit<Component, 'uid' | 'type'>>) => void;
   removeComponent: (uid:string) => void;
+  clearAllComponents: () => void;
   toggleTaken: (uid: string) => void;
   getNextId: (type: ComponentType) => string;
   dialogState: DialogState;
@@ -27,11 +28,8 @@ interface ComponentContextType {
 const ComponentContext = createContext<ComponentContextType | undefined>(undefined);
 
 const initialComponents: Component[] = [
-    { uid: '1', type: 'resistor', id: 'R-1', value: '10kΩ', taken: false },
-    { uid: '2', type: 'resistor', id: 'R-2', value: '470Ω', taken: true },
-    { uid: '3', type: 'capacitor', id: 'C-1', value: '100nF', taken: false },
-    { uid: '4', type: 'capacitor', id: 'C-2', value: '10nF', taken: false },
-    { uid: '5', type: 'capacitor', id: 'C-3', value: '22pF', taken: true },
+    { uid: '1', type: 'resistor', id: 'R-1', value: '10kΩ', taken: false },
+    { uid: '2', type: 'capacitor', id: 'C-1', value: '100nF', taken: true },
 ];
 
 
@@ -118,6 +116,15 @@ export const ComponentProvider = ({ children }: { children: ReactNode }) => {
     })
   };
 
+  const clearAllComponents = () => {
+    setComponents([]);
+    toast({
+        title: 'All Components Cleared',
+        description: 'Your component list is now empty.',
+        variant: 'destructive',
+    })
+  }
+
   const toggleTaken = (uid: string) => {
     setComponents(prev =>
       prev.map(c => (c.uid === uid ? { ...c, taken: !c.taken } : c))
@@ -148,6 +155,7 @@ export const ComponentProvider = ({ children }: { children: ReactNode }) => {
     addComponent,
     updateComponent,
     removeComponent,
+    clearAllComponents,
     toggleTaken,
     getNextId,
     dialogState,
