@@ -34,19 +34,22 @@ export default function Home() {
         </header>
 
         <main>
-          <div className="mb-6 flex flex-wrap justify-center gap-4">
-            <Button
-              onClick={() => setDialogState({ isOpen: true, type: 'resistor' })}
-            >
-              <PlusCircle className="mr-2 h-4 w-4" /> Add Resistor
-            </Button>
-            <Button
-              onClick={() =>
-                setDialogState({ isOpen: true, type: 'capacitor' })
-              }
-            >
-              <PlusCircle className="mr-2 h-4 w-4" /> Add Capacitor
-            </Button>
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <div className="flex flex-wrap gap-4">
+              <Button
+                onClick={() => setDialogState({ isOpen: true, type: 'resistor' })}
+              >
+                <PlusCircle className="mr-2 h-4 w-4" /> Add Resistor
+              </Button>
+              <Button
+                onClick={() =>
+                  setDialogState({ isOpen: true, type: 'capacitor' })
+                }
+              >
+                <PlusCircle className="mr-2 h-4 w-4" /> Add Capacitor
+              </Button>
+            </div>
+            
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive">
