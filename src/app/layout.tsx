@@ -24,9 +24,32 @@ const courierPrime = Courier_Prime({
   variable: '--font-code',
 });
 
+const pageTitle = 'Resistor & Capacitor Code Calculator | Resistor App';
+const pageDescription = 'Easily calculate resistor color codes and capacitor 3-digit codes with our intuitive component workbench. A perfect tool for electronics hobbyists and engineers.';
+
 export const metadata: Metadata = {
-  title: 'Resistor & Capacitor Code Calculator | Resistor App',
-  description: 'Easily calculate resistor color codes and capacitor 3-digit codes with our intuitive component workbench. A perfect tool for electronics hobbyists and engineers.',
+  title: {
+    default: pageTitle,
+    template: `%s | Resistor App`,
+  },
+  description: pageDescription,
+  openGraph: {
+    title: pageTitle,
+    description: pageDescription,
+    siteName: 'Resistor App',
+    url: 'https://resistorapp.com',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: pageTitle,
+    description: pageDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
