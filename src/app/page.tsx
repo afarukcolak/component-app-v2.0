@@ -34,46 +34,41 @@ export default function Home() {
         </header>
 
         <main>
-          <div className="mb-6 flex items-center justify-center gap-4">
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button
-                onClick={() => setDialogState({ isOpen: true, type: 'resistor' })}
-              >
-                <PlusCircle className="mr-2 h-4 w-4" /> Add Resistor
-              </Button>
-              <Button
-                onClick={() =>
-                  setDialogState({ isOpen: true, type: 'capacitor' })
-                }
-              >
-                <PlusCircle className="mr-2 h-4 w-4" /> Add Capacitor
-              </Button>
-            </div>
-            
-            <div className="ml-auto">
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive">
-                    <Trash2 className="mr-2 h-4 w-4" /> Clear All
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete
-                      all components from your list.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => clearAllComponents()}>
-                      Continue
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
+          <div className="mb-6 flex flex-wrap justify-center gap-4">
+            <Button
+              onClick={() => setDialogState({ isOpen: true, type: 'resistor' })}
+            >
+              <PlusCircle className="mr-2 h-4 w-4" /> Add Resistor
+            </Button>
+            <Button
+              onClick={() =>
+                setDialogState({ isOpen: true, type: 'capacitor' })
+              }
+            >
+              <PlusCircle className="mr-2 h-4 w-4" /> Add Capacitor
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive">
+                  <Trash2 className="mr-2 h-4 w-4" /> Clear All
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    all components from your list.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => clearAllComponents()}>
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
 
           <ComponentTable />
