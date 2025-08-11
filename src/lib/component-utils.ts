@@ -11,11 +11,11 @@ const multiplierCode: { [key: number]: string } = {
   [-2]: 'silver'
 };
 
-export function parseComponentValue(valueStr: string): { numericValue: number; formattedValue: string } | null {
+export function parseComponentValue(valueStr: string): { numericValue: number; formattedValue: string; unit: string } | null {
   if (!valueStr) return null;
 
   const valueClean = valueStr.toLowerCase().replace(/\s/g, '');
-  const multiplierMatch = valueClean.match(/([kMmegapnuf])/)
+  const multiplierMatch = valueClean.match(/([kmgtµunpf])/)
   const multiplier = multiplierMatch ? multiplierMatch[1] : '';
   const numPart = parseFloat(valueClean.replace(multiplier, ''));
 
@@ -28,38 +28,55 @@ export function parseComponentValue(valueStr: string): { numericValue: number; f
     case 'k': factor = 1e3; unit = 'kΩ'; break;
     case 'm':
       // Distinguish Mega from mili
-      if (valueStr.includes('M')) {
+      if (valueStr.toUpperCase().includes('M')) {
          factor = 1e6; unit = 'MΩ';
       } else {
-         factor = 1e-3; unit = 'mΩ'
+         factor = 1e-3; unit = 'mF'
       }
       break;
     case 'g': factor = 1e9; unit = 'GΩ'; break;
+    case 't': factor = 1e12; unit = 'TΩ'; break;
     case 'p': factor = 1e-12; unit = 'pF'; break;
     case 'n': factor = 1e-9; unit = 'nF'; break;
+    case 'µ':
     case 'u': factor = 1e-6; unit = 'µF'; break;
     case 'f': factor = 1; unit = 'F'; break;
-    default: unit = 'Ω';
+    default: unit = 'Ω'; // Default to Ohms if no unit is found
   }
-  
+
+  // Determine if it's a capacitor or resistor based on typical units
+  if (['F', 'f', 'p', 'n', 'u', 'µ'].some(u => valueStr.includes(u))) {
+      unit = unit || 'F';
+      if (unit.endsWith('Ω')) unit = 'F';
+  } else {
+      unit = unit || 'Ω';
+       if (unit.endsWith('F')) unit = 'Ω';
+  }
+
   const numericValue = numPart * factor;
-  
+
+  // Auto-format capacitor values for display
   if (unit.includes('F')) {
-      if (numericValue >= 1) return { numericValue, formattedValue: `${numPart}${unit}`};
-      if (numericValue >= 1e-6) return { numericValue, formattedValue: `${numPart*1e6}µF`};
-      if (numericValue >= 1e-9) return { numericValue, formattedValue: `${numPart*1e9}nF`};
-      if (numericValue >= 1e-12) return { numericValue, formattedValue: `${numPart*1e12}pF`};
+      let displayValue = numPart;
+      let displayUnit = unit;
+      if (numericValue >= 1) { displayValue = numericValue; displayUnit = 'F'}
+      else if (numericValue >= 1e-3) { displayValue = numericValue / 1e-3; displayUnit = 'mF'}
+      else if (numericValue >= 1e-6) { displayValue = numericValue / 1e-6; displayUnit = 'µF'}
+      else if (numericValue >= 1e-9) { displayValue = numericValue / 1e-9; displayUnit = 'nF'}
+      else if (numericValue >= 1e-12) { displayValue = numericValue / 1e-12; displayUnit = 'pF'}
+      return { numericValue, formattedValue: `${displayValue}${displayUnit}`, unit: displayUnit };
   }
   
   const formattedValue = `${numPart}${unit}`.replace('Ω', 'Ω');
   
-  return { numericValue, formattedValue };
+  return { numericValue, formattedValue, unit };
 }
 
 
 export function getResistorBands(value: string) {
   const parsed = parseComponentValue(value);
-  if (!parsed || parsed.numericValue <= 0) {
+  // Ensure it's a resistor value, not a capacitor
+  if (!parsed || parsed.unit.includes('F') || parsed.numericValue <= 0) {
     return { band1: 'none', band2: 'none', multiplier: 'none', tolerance: 'none' };
   }
 
@@ -81,4 +98,31 @@ export function getResistorBands(value: string) {
     multiplier: multiplierCode[exponent] || 'none',
     tolerance: 'gold', // Default tolerance
   };
+}
+
+export function getCapacitorCode(value: string): string | null {
+  const parsed = parseComponentValue(value);
+  if (!parsed || !parsed.unit.includes('F') || parsed.numericValue <= 0) {
+    return null;
+  }
+  
+  const valueInPf = parsed.numericValue * 1e12;
+
+  if (valueInPf < 1.0) return null; // Codes are generally for 1pF and above
+
+  // For values < 100pF, the code can sometimes just be the value.
+  // Or use 'R' for decimal point. e.g. 4.7pF -> 4R7
+  if (valueInPf < 100) {
+    if (Number.isInteger(valueInPf)) {
+        return valueInPf.toString();
+    } else {
+        return valueInPf.toString().replace('.', 'R');
+    }
+  }
+
+  const strValue = Math.round(valueInPf).toString();
+  const firstTwoDigits = strValue.substring(0, 2);
+  const numberOfZeros = strValue.substring(2).length;
+
+  return `${firstTwoDigits}${numberOfZeros}`;
 }

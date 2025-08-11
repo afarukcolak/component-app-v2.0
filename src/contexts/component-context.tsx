@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import type { Component, Resistor, Capacitor } from '@/types';
+import { parseComponentValue } from '@/lib/component-utils';
 
 type ComponentType = 'resistor' | 'capacitor';
 
@@ -26,9 +27,11 @@ interface ComponentContextType {
 const ComponentContext = createContext<ComponentContextType | undefined>(undefined);
 
 const initialComponents: Component[] = [
-    { uid: '1', type: 'resistor', id: 'R-1', value: '10k', taken: false },
-    { uid: '2', type: 'resistor', id: 'R-2', value: '470', taken: true },
+    { uid: '1', type: 'resistor', id: 'R-1', value: '10kΩ', taken: false },
+    { uid: '2', type: 'resistor', id: 'R-2', value: '470Ω', taken: true },
     { uid: '3', type: 'capacitor', id: 'C-1', value: '100nF', taken: false },
+    { uid: '4', type: 'capacitor', id: 'C-2', value: '10nF', taken: false },
+    { uid: '5', type: 'capacitor', id: 'C-3', value: '22pF', taken: true },
 ];
 
 
@@ -47,8 +50,19 @@ export const ComponentProvider = ({ children }: { children: ReactNode }) => {
         });
         return;
     }
+    const parsed = parseComponentValue(data.value);
+    if (!parsed) {
+        toast({
+            variant: 'destructive',
+            title: 'Invalid Value',
+            description: `Could not parse the component value "${data.value}".`,
+        });
+        return;
+    }
+
     const newComponent: Component = {
       ...data,
+      value: parsed.formattedValue,
       uid: crypto.randomUUID(),
       type,
       taken: false,
@@ -70,8 +84,24 @@ export const ComponentProvider = ({ children }: { children: ReactNode }) => {
         });
         return;
     }
+    
+    let processedData = { ...data };
+    if (data.value) {
+        const parsed = parseComponentValue(data.value);
+        if (!parsed) {
+            toast({
+                variant: 'destructive',
+                title: 'Invalid Value',
+                description: `Could not parse the component value "${data.value}".`,
+            });
+            return;
+        }
+        processedData.value = parsed.formattedValue;
+    }
+
+
     setComponents(prev =>
-      prev.map(c => (c.uid === uid ? { ...c, ...data } : c)).sort((a,b) => a.id.localeCompare(b.id))
+      prev.map(c => (c.uid === uid ? { ...c, ...processedData } : c)).sort((a,b) => a.id.localeCompare(b.id))
     );
      toast({
         title: 'Component Updated',

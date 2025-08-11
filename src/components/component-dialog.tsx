@@ -25,7 +25,6 @@ import {
 import { useComponentContext } from '@/contexts/component-context';
 import { ResistorVisualization } from './resistor-visualization';
 import { CapacitorVisualization } from './capacitor-visualization';
-import { parseComponentValue } from '@/lib/component-utils';
 
 const formSchema = z.object({
   id: z.string().min(1, 'Component ID is required'),
@@ -35,7 +34,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export function ComponentDialog() {
-  const { dialogState, setDialogState, addComponent, updateComponent, getNextId, components } = useComponentContext();
+  const { dialogState, setDialogState, addComponent, updateComponent, getNextId } = useComponentContext();
   const { isOpen, type, component } = dialogState;
   const isEditMode = !!component;
 
@@ -63,14 +62,10 @@ export function ComponentDialog() {
   }
 
   const onSubmit = (values: FormValues) => {
-    const componentData = {
-      ...values,
-      value: parseComponentValue(values.value)?.formattedValue || values.value,
-    };
     if (isEditMode && component) {
-      updateComponent(component.uid, componentData);
+      updateComponent(component.uid, values);
     } else if (type) {
-      addComponent(type, componentData);
+      addComponent(type, values);
     }
     handleClose();
   };
