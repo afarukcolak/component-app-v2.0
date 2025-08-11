@@ -110,12 +110,17 @@ export function getCapacitorCode(value: string): string | null {
 
   if (valueInPf < 1.0) return null; // Codes are generally for 1pF and above
 
-  // For values < 100pF, the code can sometimes just be the value.
-  // Or use 'R' for decimal point. e.g. 4.7pF -> 4R7
   if (valueInPf < 100) {
     if (Number.isInteger(valueInPf)) {
-        return valueInPf.toString();
+      if (valueInPf < 10) {
+        return `0${valueInPf}`;
+      }
+      const strVal = valueInPf.toString();
+      const firstTwoDigits = strVal.substring(0, 2);
+       // For values like 22pF, it should be 22 * 10^0 -> 220
+      return `${firstTwoDigits}0`;
     } else {
+        // For values like 4.7pF -> 4R7
         return valueInPf.toString().replace('.', 'R');
     }
   }
