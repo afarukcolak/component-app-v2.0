@@ -21,8 +21,6 @@ interface ComponentContextType {
   getNextId: (type: ComponentType) => string;
   dialogState: DialogState;
   setDialogState: (state: DialogState) => void;
-  suggestionToolOpen: boolean;
-  setSuggestionToolOpen: (isOpen: boolean) => void;
 }
 
 const ComponentContext = createContext<ComponentContextType | undefined>(undefined);
@@ -37,7 +35,6 @@ const initialComponents: Component[] = [
 export const ComponentProvider = ({ children }: { children: ReactNode }) => {
   const [components, setComponents] = useState<Component[]>(initialComponents);
   const [dialogState, setDialogState] = useState<DialogState>({ isOpen: false });
-  const [suggestionToolOpen, setSuggestionToolOpen] = useState(false);
   const { toast } = useToast();
 
   const addComponent = (type: ComponentType, data: { id: string; value: string }) => {
@@ -56,7 +53,7 @@ export const ComponentProvider = ({ children }: { children: ReactNode }) => {
       type,
       taken: false,
     };
-    setComponents(prev => [...prev, newComponent]);
+    setComponents(prev => [...prev, newComponent].sort((a,b) => a.id.localeCompare(b.id)));
     toast({
         title: 'Component Added',
         description: `${data.id} has been added to your list.`,
@@ -74,7 +71,7 @@ export const ComponentProvider = ({ children }: { children: ReactNode }) => {
         return;
     }
     setComponents(prev =>
-      prev.map(c => (c.uid === uid ? { ...c, ...data } : c))
+      prev.map(c => (c.uid === uid ? { ...c, ...data } : c)).sort((a,b) => a.id.localeCompare(b.id))
     );
      toast({
         title: 'Component Updated',
@@ -125,8 +122,6 @@ export const ComponentProvider = ({ children }: { children: ReactNode }) => {
     getNextId,
     dialogState,
     setDialogState,
-    suggestionToolOpen,
-    setSuggestionToolOpen
   };
 
   return (

@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 interface ResistorVisualizationProps {
   value: string;
   className?: string;
+  isTaken?: boolean;
 }
 
 const colorMap: { [key: string]: string } = {
@@ -25,11 +26,11 @@ const colorMap: { [key: string]: string } = {
   none: 'bg-transparent',
 };
 
-export function ResistorVisualization({ value, className }: ResistorVisualizationProps) {
+export function ResistorVisualization({ value, className, isTaken }: ResistorVisualizationProps) {
   const bands = getResistorBands(value);
 
   return (
-    <div className={cn("flex items-center justify-center w-40 h-10", className)}>
+    <div className={cn("flex items-center justify-center w-40 h-10", className, isTaken && "opacity-50")}>
       <div className="w-4 h-px bg-muted-foreground"></div>
       <div className="w-28 h-8 bg-[#F0EAD6] dark:bg-yellow-200/20 rounded-lg flex items-center justify-center space-x-1.5 px-2 shadow-inner border border-black/10">
         <div className={cn("w-2 h-8 rounded-sm", colorMap[bands.band1])}></div>

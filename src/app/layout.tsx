@@ -5,7 +5,7 @@ import { ComponentProvider } from '@/contexts/component-context';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'CircuitBase',
+  title: 'Resistor App',
   description: 'Your component workbench',
 };
 
