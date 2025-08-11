@@ -14,9 +14,9 @@ interface CapacitorVisualizationProps {
 export function CapacitorVisualization({ value, className, isTaken }: CapacitorVisualizationProps) {
   if (value === '<3') {
     return (
-      <div className={cn("relative flex items-center justify-center w-32 h-10 text-primary", className, isTaken && "opacity-50")}>
+      <div className={cn("relative flex items-center justify-center w-32 h-10 text-red-500", className, isTaken && "opacity-50")}>
         <Heart className="w-8 h-8 fill-current" />
-        <span className="absolute text-xs font-bold text-primary-foreground select-none">FI</span>
+        <span className="absolute text-xs font-bold text-white select-none">FI</span>
       </div>
     );
   }
