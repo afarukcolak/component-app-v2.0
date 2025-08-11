@@ -5,8 +5,8 @@ import { ComponentProvider } from '@/contexts/component-context';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'Resistor App',
-  description: 'Your component workbench',
+  title: 'Resistor & Capacitor Code Calculator | Resistor App',
+  description: 'Easily calculate resistor color codes and capacitor 3-digit codes with our intuitive component workbench. A perfect tool for electronics hobbyists and engineers.',
 };
 
 export default function RootLayout({
