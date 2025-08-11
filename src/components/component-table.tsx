@@ -39,11 +39,11 @@ const ComponentRow = ({ component, onEdit, onRemove, onToggle, isMobile }: { com
               <div>
                 <p className={cn(
                     "font-bold font-code text-lg",
-                    component.taken && "italic text-muted-foreground line-through"
+                    component.taken && "italic text-muted-foreground"
                 )}>{component.id}</p>
                 <p className={cn(
                     "font-code text-sm text-muted-foreground",
-                     component.taken && "italic line-through"
+                     component.taken && "italic"
                 )}>{component.value}</p>
               </div>
             </div>
@@ -84,7 +84,7 @@ const ComponentRow = ({ component, onEdit, onRemove, onToggle, isMobile }: { com
       <TableCell
         className={cn(
           'font-code font-semibold',
-          component.taken && 'italic text-muted-foreground line-through'
+          component.taken && 'italic text-muted-foreground'
         )}
       >
         {component.id}
@@ -92,7 +92,7 @@ const ComponentRow = ({ component, onEdit, onRemove, onToggle, isMobile }: { com
       <TableCell
         className={cn(
           'font-code',
-          component.taken && 'italic text-muted-foreground line-through'
+          component.taken && 'italic text-muted-foreground'
         )}
       >
         {component.value}
