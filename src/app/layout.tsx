@@ -3,6 +3,26 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { ComponentProvider } from '@/contexts/component-context';
 import { cn } from '@/lib/utils';
+import { Inter, Space_Grotesk, Courier_Prime } from 'next/font/google';
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-body',
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-headline',
+});
+
+const courierPrime = Courier_Prime({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-code',
+});
 
 export const metadata: Metadata = {
   title: 'Resistor & Capacitor Code Calculator | Resistor App',
@@ -16,21 +36,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Courier+New&family=Inter:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
       <body
         className={cn(
           'min-h-screen bg-background font-body antialiased',
+          inter.variable,
+          spaceGrotesk.variable,
+          courierPrime.variable
         )}
       >
         <ComponentProvider>
